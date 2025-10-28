@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .dashboard-container {
+      background: #fff;
+      width: 90%;
+      max-width: 900px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      display: flex;
+      overflow: hidden;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Left section (Image) */
+    .image-section {
+      flex: 1;
+      background: url("https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=80") no-repeat center center/cover;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .overlay-text {
+      position: absolute;
+      bottom: 40px;
+      left: 30px;
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Right section (Text and actions) */
+    .content-section {
+      flex: 1;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    h2 span {
+      color: #4e54c8;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .welcome-image {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    button {
+      background: #4e54c8;
+      border: none;
+      color: #fff;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    button:hover {
+      background: #5f65e5;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 850px) {
+      .dashboard-container {
+        flex-direction: column;
+        width: 95%;
+      }
+
+      .image-section {
+        height: 250px;
+      }
+
+      .content-section {
+        padding: 30px 25px;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Left Section (Image) -->
+    <div class="image-section">
+      <div class="overlay"></div>
+      <div class="overlay-text">Welcome to your dashboard 🌟</div>
+    </div>
+
+    <!-- Right Section (Content) -->
+    <div class="content-section">
+      <img class="welcome-image" src="https://cdn.dribbble.com/users/1355613/screenshots/11928065/media/74d5a516eb9c94fef9e4ab4e93d1d5c4.png?resize=800x600&vertical=center" alt="Welcome Image" />
+
+      <h2>Welcome, <span><%= firstname %></span> 🎉</h2>
+      <p>You’ve successfully signed in. Let’s make today productive and inspiring!</p>
+      <form action="/signin" method="get">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+  <h2>Welcome, <%= firstname %> 🎉</h2>
+  <p>You have successfully signed in!</p>
+</body>
+</html> -->
