@@ -151,25 +151,10 @@
     <div class="content-section">
       <img class="welcome-image" src="https://cdn.dribbble.com/users/1355613/screenshots/11928065/media/74d5a516eb9c94fef9e4ab4e93d1d5c4.png?resize=800x600&vertical=center" alt="Welcome Image" />
 
-      <h2>Welcome, <span><%= firstname %></span> 🎉</h2>
+      <h2>Welcome, <span><%= firstname || '' %></span> <span><%= lastname || '' %></span> 🎉
+</h2>
       <p>You’ve successfully signed in. Let’s make today productive and inspiring!</p>
-      <form action="/signin" method="get">
-        <button type="submit">Logout</button>
-      </form>
     </div>
   </div>
 </body>
 </html>
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <title>Dashboard</title>
-</head>
-<body>
-  <h2>Welcome, <%= firstname %> 🎉</h2>
-  <p>You have successfully signed in!</p>
-</body>
-</html> -->
