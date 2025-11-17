@@ -78,7 +78,8 @@ const postSignUp = (req, res) => {
           console.log("Email sent:" + info.responsible);
         }
       });
-      res.redirect("/user/signin");
+      res.status(201).json({success: true, message: 'User registered!'})
+      // res.redirect("/user/signin");
     })
     .catch((err) => {
       if (err !== "User already exits") {
@@ -103,12 +104,14 @@ const postSignIn = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-
+    
     if (!isMatch) {
+      res.status(201).json({success: true, message: 'User logged in!'})
+    } else {
       return res.send("Invalid credentials entry");
     }
 
-    res.render("dashboard", {
+    res.render("/dashboard", {
       firstname: user.firstName,
       lastname: user.lastName,
     });

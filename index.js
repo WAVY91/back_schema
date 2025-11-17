@@ -12,10 +12,19 @@ app.set("view engine", "ejs");
 // const nodemailer = require('nodemailer')
 const User = require('./models/user.models')
 const userRoutes = require('./routes/user.routes')
+const cors = require('cors')
+app.use(cors ({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT,', 'DELETE', 'PATCH'],
+  credentials: true
+}))
+const jwt = require('jsonwebtoken')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/user', userRoutes)
+
+
 
 mongoose
   .connect(URI)
