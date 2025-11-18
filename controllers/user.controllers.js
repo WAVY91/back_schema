@@ -98,28 +98,46 @@ const postSignIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Check if user exists
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.send(" user not found");
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
+    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     
     if (!isMatch) {
-      res.status(201).json({success: true, message: 'User logged in!'})
-    } else {
-      return res.send("Invalid credentials entry");
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password",
+      });
     }
 
-    res.render("/dashboard", {
-      firstname: user.firstName,
-      lastname: user.lastName,
+    // If everything is correct
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+      }
     });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error signing in");
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
   }
-}
+};
+
 
 module.exports = {getSignUp, getSignIn, postSignUp, postSignIn}
