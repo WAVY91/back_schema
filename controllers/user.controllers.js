@@ -26,7 +26,7 @@ const postSignUp = (req, res) => {
   User.findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
-        res.status(400).send("Email already exists");
+        res.status(400).send("Email already exists!");
         return Promise.reject("User already exists");
       }
 
