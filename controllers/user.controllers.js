@@ -101,29 +101,75 @@ const postSignIn = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.send(" user not found");
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     
     if (!isMatch) {
-      return res.status(401).json({success: false, message: 'Invalid credentials entry'})
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({id:user._id, firstName:user.firstName, lastName:user.lastName, email:user.email}, process.env.JWT_SECRET,{expiresIn: '1h'})
+    const token = jwt.sign(
+      {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-    return res.status(201).json({success: true, message: 'User logged in!', token, user: {id:user._id, firstName:user.firstName, lastName:user.lastName, email:user.email,},})
-
-    res.render("/dashboard", {
-      firstname: user.firstName,
-      lastname: user.lastName,
+    return res.status(200).json({
+      success: true,
+      message: "User logged in!",
+      token,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      }
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).send("Error signing in");
   }
+};
 
-}
+
+// const postSignIn = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return res.send(" user not found");
+//     }
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+    
+//     if (!isMatch) {
+//       return res.status(401).json({success: false, message: 'Invalid credentials entry'})
+//     }
+
+//     const token = jwt.sign({id:user._id, firstName:user.firstName, lastName:user.lastName, email:user.email}, process.env.JWT_SECRET,{expiresIn: '1h'})
+
+//     return res.status(201).json({success: true, message: 'User logged in!', token, user: {id:user._id, firstName:user.firstName, lastName:user.lastName, email:user.email,},})
+
+//     res.render("/dashboard", {
+//       firstname: user.firstName,
+//       lastname: user.lastName,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Error signing in");
+//   }
+
+// }
 
 
 module.exports = {getSignUp, getSignIn, postSignUp, postSignIn}
