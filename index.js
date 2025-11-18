@@ -18,7 +18,6 @@ app.use(cors ({
   methods: ['GET', 'POST', 'PUT,', 'DELETE', 'PATCH'],
   credentials: true
 }))
-const jwt = require('jsonwebtoken')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
+const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const User = require('../models/user.models')
 
@@ -106,10 +107,12 @@ const postSignIn = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     
     if (!isMatch) {
-      res.status(201).json({success: true, message: 'User logged in!'})
-    } else {
-      return res.send("Invalid credentials entry");
+      return res.status(401).json({success: false, message: 'Invalid credentials entry'})
     }
+
+    const token = jwt.sign({id:user._id, firstName:user.firstName, lastName:user.lastName, email:user.email}, process.env.JWT_SECRET,{expiresIn: '1h'})
+
+    return res.status(201).json({success: true, message: 'User logged in!', token, user: {id:user._id, firstName:user.firstName, lastName:user.lastName, email:user.email,},})
 
     res.render("/dashboard", {
       firstname: user.firstName,
@@ -119,6 +122,7 @@ const postSignIn = async (req, res) => {
     console.error(err);
     res.status(500).send("Error signing in");
   }
+
 }
 
 
