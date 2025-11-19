@@ -14,7 +14,7 @@ const User = require('./models/user.models')
 const userRoutes = require('./routes/user.routes')
 const cors = require('cors')
 app.use(cors ({
-  origin: 'https://frontendprac-six.vercel.app',
+  origin: 'https://frontend-one-two.vercel.app',
   methods: ['GET', 'POST', 'PUT,', 'DELETE', 'PATCH'],
   credentials: true
 }))
