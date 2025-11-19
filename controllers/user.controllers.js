@@ -124,7 +124,7 @@ const postSignIn = async (req, res) => {
     // If everything is correct
     return res.status(200).json({
       success: true,
-      message: "Login successful",
+      message: "Login successful!",
       user: {
         id: user._id,
         firstName: user.firstName,
