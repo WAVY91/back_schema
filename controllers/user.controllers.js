@@ -118,8 +118,8 @@ const postSignIn = async (req, res) => {
       });
     }
 
-    // const token = jwt.sign({id: user._id, email: user.email}, JWT_SECRET, {expiresIn: '1d'})
-    // console.log(JWT_SECRET)
+    const token = jwt.sign({id: user._id, email: user.email}, JWT_SECRET, {expiresIn: '1d'})
+    console.log(token)
 
     // If everything is correct
     return res.status(200).json({
