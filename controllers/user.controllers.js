@@ -6,18 +6,16 @@ const nodemailer = require("nodemailer");
 const User = require("../models/user.models");
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_super_secret_key";
-const EMAIL_USER = process.env.EMAIL_USER || "your_email@gmail.com"; // Gmail account
-const EMAIL_PASS = process.env.EMAIL_PASS || "your_email_app_password"; // Gmail app password
+const EMAIL_USER = process.env.EMAIL_USER || "your_email@gmail.com"; 
+const EMAIL_PASS = process.env.EMAIL_PASS || "your_email_app_password";
 
 // ====================== GET SIGNUP PAGE ======================
 const getSignUp = (req, res) => {
-  // Renders signup page (if using template engine like EJS)
-  res.render("signup"); 
+  res.render("signup");
 };
 
 // ====================== GET SIGNIN PAGE ======================
 const getSignIn = (req, res) => {
-  // Renders signin page (if using template engine like EJS)
   res.render("signin");
 };
 
@@ -26,7 +24,6 @@ const postSignUp = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    // Validate input
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
@@ -40,16 +37,13 @@ const postSignUp = async (req, res) => {
       });
     }
 
-    // Check existing email
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ success: false, message: "Email already exists" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
     const newUser = await User.create({
       firstName,
       lastName,
@@ -68,14 +62,9 @@ const postSignUp = async (req, res) => {
       to: email,
       subject: "Welcome to Our Application!",
       html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f6fb;">
-          <div style="max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; text-align: center;">
-            <h1 style="color: #4f8cff;">Welcome, ${firstName}!</h1>
-            <p>Your signup was successful. We're excited to have you on board!</p>
-            <p>Login anytime using your email: <strong>${email}</strong></p>
-            <hr style="margin: 20px 0;">
-            <p style="color: #888;">Best regards,<br/>Your Application Team</p>
-          </div>
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Welcome, ${firstName}!</h2>
+          <p>Your signup was successful.</p>
         </div>
       `,
     };
@@ -85,11 +74,11 @@ const postSignUp = async (req, res) => {
       else console.log("Email sent:", info.response);
     });
 
-    // Respond with success
-    res.status(201).json({ success: true, message: "Signup successful!" });
+    return res.status(201).json({ success: true, message: "Signup successful!" });
+
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Server Error" });
+    return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
@@ -103,10 +92,15 @@ const postSignIn = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user) {
+      // DO NOT SEND DIFFERENT ERROR (prevents wrong frontend handling)
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ success: false, message: "Incorrect password" });
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
+    }
 
     const token = jwt.sign(
       { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email },
@@ -114,9 +108,9 @@ const postSignIn = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Login successful!!",
+      message: "Login successful!",
       token,
       user: {
         id: user._id,
@@ -125,14 +119,14 @@ const postSignIn = async (req, res) => {
         email: user.email,
       },
     });
+
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Server Error" });
+    return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
 module.exports = { getSignUp, getSignIn, postSignUp, postSignIn };
-
 
 
 // const bcrypt = require("bcryptjs");
